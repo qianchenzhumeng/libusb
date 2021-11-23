@@ -764,10 +764,10 @@ static int windows_cancel_transfer(struct usbi_transfer *itransfer)
 	// Try CancelIoEx() on the transfer
 	// If that fails, fall back to the backend's cancel_transfer()
 	// function if it is available
-	if (CancelIoEx(transfer_priv->handle, &transfer_priv->overlapped))
-		return LIBUSB_SUCCESS;
-	else if (GetLastError() == ERROR_NOT_FOUND)
-		return LIBUSB_ERROR_NOT_FOUND;
+	//if (CancelIoEx(transfer_priv->handle, &transfer_priv->overlapped))
+	//	return LIBUSB_SUCCESS;
+	//else if (GetLastError() == ERROR_NOT_FOUND)
+	//	return LIBUSB_ERROR_NOT_FOUND;
 
 	if (priv->backend->cancel_transfer)
 		return priv->backend->cancel_transfer(itransfer);

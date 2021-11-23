@@ -30,6 +30,11 @@
 
 #include <stdbool.h>
 
+// Missing from MinGW
+#if !defined(FACILITY_SETUPAPI)
+#define FACILITY_SETUPAPI	15
+#endif
+
 /*
  * Workaround for the mess that exists with the DWORD and ULONG types.
  * Visual Studio unconditionally defines these types as 'unsigned long'
