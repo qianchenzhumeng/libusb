@@ -95,6 +95,18 @@ static void print_ss_usb_cap(struct libusb_ss_usb_device_capability_descriptor *
 	printf("      bU2devExitLat:         %u\n", ss_usb_cap->bU2DevExitLat);
 }
 
+static void print_container_id_desc(struct libusb_container_id_descriptor *container_id_desc)
+{
+	uint8_t i = 0;
+
+	printf("    Container ID:            0x");
+	for (i = 0; i < 16; i++)
+	{
+		printf("%02X", container_id_desc->ContainerID[i]);
+	}
+	printf("\n");
+}
+
 static void print_bos(libusb_device_handle *handle)
 {
 	struct libusb_bos_descriptor *bos;
@@ -130,6 +142,15 @@ static void print_bos(libusb_device_handle *handle)
 
 			print_ss_usb_cap(ss_dev_cap);
 			libusb_free_ss_usb_device_capability_descriptor(ss_dev_cap);
+		} else if (dev_cap->bDevCapabilityType == LIBUSB_BT_CONTAINER_ID) {
+			struct libusb_container_id_descriptor *container_id_desc;
+
+			ret = libusb_get_container_id_descriptor(NULL, dev_cap, &container_id_desc);
+			if (ret < 0)
+				return;
+
+			print_container_id_desc(container_id_desc);
+			libusb_free_container_id_descriptor(container_id_desc);
 		}
 	}
 
