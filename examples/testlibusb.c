@@ -204,9 +204,27 @@ static void print_device(libusb_device *dev, libusb_device_handle *handle)
 		return;
 	}
 
-	printf("Dev (bus %u, device %u): %04X - %04X speed: %s\n",
+	printf("Dev (bus %u, device %u): %04X - %04X speed: %-4s ",
 	       libusb_get_bus_number(dev), libusb_get_device_address(dev),
 	       desc.idVendor, desc.idProduct, speed);
+	switch(desc.bDeviceClass) {
+		case LIBUSB_CLASS_AUDIO:
+			printf("Audio\n");
+			break;
+		case LIBUSB_CLASS_HID:
+			printf("Hid\n");
+			break;
+		case LIBUSB_CLASS_HUB:
+			printf("Hub\n");
+			break;
+		case LIBUSB_CLASS_VENDOR_SPEC:
+			printf("vendor-specific\n");
+			break;
+		default:
+			printf("(0x%02x)", desc.bDeviceClass);
+			printf("\n");
+			break;
+	}
 
 	if (!handle)
 		libusb_open(dev, &handle);
